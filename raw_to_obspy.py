@@ -168,7 +168,10 @@ def import_USGS(station,network):
         try:
             tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}.10min-'.format(k=station,p=network))
         except FileNotFoundError:
-            tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}_merge-2.jl'.format(k=station,p=network))
+            try:
+                tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}_merge-2.jl'.format(k=station,p=network))
+            except FileNotFoundError:
+                tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}.10min.gz'.format(k=station,p=network))
 
     sample_rate =  round((tm[-1]-tm[-2])/dt.timedelta(minutes=1))
     sample_rate_beg = round((tm[1]-tm[0])/dt.timedelta(minutes=1))

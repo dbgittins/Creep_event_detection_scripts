@@ -619,7 +619,7 @@ def import_csv(path):
     return tm, creep
 
 
-def interpolate(tm,creep,sample_rate,sample_rate_beg):
+"""def interpolate(tm,creep,sample_rate,sample_rate_beg):
     '''interpolate the time series data 
         input          tm: time
         input       creep: slip
@@ -638,6 +638,39 @@ def interpolate(tm,creep,sample_rate,sample_rate_beg):
     interpolated = upsampled.interpolate(method='ffill') #interpolate the dataset to get a continious record evenly spaced at 10 mins
     tm_int = np.array(interpolated.Time) #make Time and creep into Numpy array.
     creep_int = np.array(interpolated.Creep)
+    return tm_int, creep_int, upsampled"""
+
+def interpolate(tm, creep, sample_rate):
+    '''Interpolate the time series data.
+    
+    Parameters:
+        tm (array-like): Time values (e.g., list, numpy array).
+        creep (array-like): Slip values corresponding to the time values.
+        sample_rate (int): Time difference between samples in minutes.
+        
+    Returns:
+        tm_int (numpy.ndarray): Interpolated time.
+        creep_int (numpy.ndarray): Interpolated slip.
+        upsampled (DataFrame): DataFrame of upsampled and interpolated data.
+    '''
+    
+    Time = pd.Series(pd.to_datetime(tm))  # Convert to pandas Series
+    creeping = pd.DataFrame({'Time': Time, 'Creep': creep})  # Create a DataFrame
+    
+    # Round creep times to nearest sample_rate minutes
+    creeping.Time = creeping.Time.dt.round(f"{sample_rate}min")
+    creeping.set_index('Time', inplace=True)  # Set index to Time
+    
+    creeping.drop_duplicates(inplace=True)  # Drop duplicates based on the Time index
+    upsampled = creeping.resample(f'{sample_rate}min').ffill(limit=1)  # Upsample to get a uniformly spaced dataset
+    
+    # Use forward fill to interpolate the dataset
+    interpolated = upsampled.ffill()  # Forward fill to get a continuous record evenly spaced
+    
+    # Convert to NumPy arrays
+    tm_int = np.array(interpolated.index)  # Use index for interpolated time
+    creep_int = np.array(interpolated['Creep'])  # Extract interpolated slip
+    
     return tm_int, creep_int, upsampled
 
 
