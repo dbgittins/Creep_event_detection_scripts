@@ -8,6 +8,7 @@ import inflect
 stringify = inflect.engine()
 import math
 import os
+import fnmatch
 
 
 def one_to_five(tm_diff):
@@ -150,6 +151,17 @@ def check_dir(path):
         os.makedirs(path, exist_ok=True)
     return
 
+
+
+def find_files_with_wildcard(pattern, search_path):
+    matching_files = []
+    for root, dirs, files in os.walk(search_path):
+        for file in files:
+            if fnmatch.fnmatch(file, pattern):  # Use wildcard pattern matching
+                matching_files.append(os.path.join(root, file))
+    
+    return matching_files
+
 def interpolate(creeping, period):
     print(period)
     creeping_df = creeping.copy(deep=True)
@@ -162,7 +174,10 @@ def interpolate(creeping, period):
 
 def import_USGS(station,network):
     print(station)
-    try:
+
+    file_path = find_files_with_wildcard('{k}*'.format(k=station),'../../Data/{p}/Raw/'.format(p=network))
+    tm,creep = cep.import_text('{k}'.format(k=file_path[0]))
+    '''try:
         tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}_merge.jl'.format(k=station,p=network))
     except FileNotFoundError:
         try:
@@ -171,7 +186,7 @@ def import_USGS(station,network):
             try:
                 tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}_merge-2.jl'.format(k=station,p=network))
             except FileNotFoundError:
-                tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}.10min.gz'.format(k=station,p=network))
+                tm,creep = cep.import_text('../../../Data/{p}/Raw/{k}.10min.gz'.format(k=station,p=network))'''
 
     sample_rate =  round((tm[-1]-tm[-2])/dt.timedelta(minutes=1))
     sample_rate_beg = round((tm[1]-tm[0])/dt.timedelta(minutes=1))
