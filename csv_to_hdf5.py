@@ -200,6 +200,19 @@ def five_to_one(tm_diff):
                                         break
     return i  # Indicates no valid transition
 
+def five_to_half(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] < 5:
+            if tm_diff[i] == 0.5:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
 def five_to_two(tm_diff):
     for i in range(len(tm_diff)):
         if tm_diff[i] < 5:
