@@ -54,6 +54,7 @@ def stringify(value):
         2: "two",
         5: "five",
         10: "ten",
+        15: "fifteen",
         30: "thirty",
         60: "sixty"
     }
@@ -200,6 +201,19 @@ def five_to_one(tm_diff):
                                         break
     return i  # Indicates no valid transition
 
+def five_to_half(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] < 5:
+            if tm_diff[i] == 0.5:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
 def five_to_two(tm_diff):
     for i in range(len(tm_diff)):
         if tm_diff[i] < 5:
@@ -336,6 +350,84 @@ def ten_to_sixty(tm_diff):
     for i in range(len(tm_diff)):
         if tm_diff[i] > 10:
             if tm_diff[i] == 60:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
+def ten_to_fifteen(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] > 10:
+            if tm_diff[i] == 15:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
+def fifteen_to_ten(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] < 15:
+            if tm_diff[i] == 10:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
+def thirty_to_fifteen(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] < 30:
+            if tm_diff[i] == 15:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
+def fifteen_to_thirty(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] > 15:
+            if tm_diff[i] == 30:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
+def five_to_fifteen(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] > 5:
+            if tm_diff[i] == 15:
+                if i >=1:
+                    if tm_diff[i-1] != tm_diff[i+1]:
+                        if i >=2:
+                            if tm_diff[i-2] != tm_diff[i+2]:
+                                if i >=200:
+                                    if tm_diff[i-200] != tm_diff[i+200]:
+                                        break
+    return i  # Indicates no valid transition
+
+def fifteen_to_five(tm_diff):
+    for i in range(len(tm_diff)):
+        if tm_diff[i] < 15:
+            if tm_diff[i] == 5:
                 if i >=1:
                     if tm_diff[i-1] != tm_diff[i+1]:
                         if i >=2:

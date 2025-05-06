@@ -673,6 +673,71 @@ def interpolate(tm, creep, sample_rate):
     
     return tm_int, creep_int, upsampled
 
+def interpolate_linear(tm, creep, sample_rate):
+    '''Interpolate the time series data.
+    
+    Parameters:
+        tm (array-like): Time values (e.g., list, numpy array).
+        creep (array-like): Slip values corresponding to the time values.
+        sample_rate (str): Sampling interval (e.g., '10T' for 10 minutes, '30S' for 30 seconds).
+        
+    Returns:
+        tm_int (numpy.ndarray): Interpolated time.
+        creep_int (numpy.ndarray): Interpolated slip.
+        upsampled (DataFrame): DataFrame of upsampled and interpolated data.
+    '''
+    
+    Time = pd.Series(pd.to_datetime(tm))  # Convert to pandas Series
+    creeping = pd.DataFrame({'Time': Time, 'Creep': creep})  # Create a DataFrame
+    
+    # Round creep times to nearest sample_rate interval
+    creeping['Time'] = creeping['Time'].dt.round(sample_rate)
+    creeping.set_index('Time', inplace=True)  # Set index to Time
+    
+    creeping = creeping[~creeping.index.duplicated()]  # Drop duplicates based on the Time index
+    upsampled = creeping.resample(sample_rate).asfreq()  # Upsample with NaNs for missing values
+    
+    # Interpolate linearly to fill missing values
+    interpolated = upsampled.interpolate(method='linear')  # Linear interpolation
+    
+    # Convert to NumPy arrays
+    tm_int = np.array(interpolated.index)  # Use index for interpolated time
+    creep_int = np.array(interpolated['Creep'])  # Extract interpolated slip
+    
+    return tm_int, creep_int, interpolated
+
+def interpolate_and_fill_zero(tm, creep, sample_rate):
+    '''Interpolate the time series data and fill gaps with 0.
+    
+    Parameters:
+        tm (array-like): Time values (e.g., list, numpy array).
+        creep (array-like): Slip values corresponding to the time values.
+        sample_rate (str): Sampling interval (e.g., '10T' for 10 minutes, '30S' for 30 seconds).
+        
+    Returns:
+        tm_int (numpy.ndarray): Interpolated time.
+        creep_int (numpy.ndarray): Interpolated slip (with gaps filled with 0).
+        upsampled (DataFrame): DataFrame of upsampled and filled data.
+    '''
+    
+    Time = pd.Series(pd.to_datetime(tm))  # Convert to pandas Series
+    creeping = pd.DataFrame({'Time': Time, 'Creep': creep})  # Create a DataFrame
+    
+    # Round creep times to nearest sample_rate interval
+    creeping['Time'] = creeping['Time'].dt.round(sample_rate)
+    creeping.set_index('Time', inplace=True)  # Set index to Time
+    
+    creeping = creeping[~creeping.index.duplicated()]  # Drop duplicates based on the Time index
+    upsampled = creeping.resample(sample_rate).asfreq()  # Upsample with NaNs for missing values
+    
+    # Fill missing values with zero instead of interpolating
+    filled = upsampled.fillna(0)
+
+    # Convert to NumPy arrays
+    tm_int = np.array(filled.index)  # Use index for interpolated time
+    creep_int = np.array(filled['Creep'])  # Extract slip with gaps filled as 0
+    
+    return tm_int, creep_int, filled
 
 def slip_difference(sampling, data, duration):
     """Calculates the hourly slip based on the sampling rate of the creepmeter
