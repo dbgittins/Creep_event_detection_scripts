@@ -12,3 +12,4 @@ Triggering
 waveforms
 logs
 test_kmeans.py
+*.yml
