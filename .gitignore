@@ -1,3 +1,14 @@
 __pycache__/*
 *.Iprof
 *.pdf
+*.grib
+*.mseed
+*.log
+*.idx
+*.csv
+era5_csv
+era5_data*
+Triggering
+waveforms
+logs
+test_kmeans.py
