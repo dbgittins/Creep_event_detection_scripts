@@ -1,0 +1,14 @@
+name: openquake-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy=1.21
+  - openquake.engine=3.23.2
+  - obspy
+  - scipy
+  - matplotlib
+  - pandas
+  - lxml
+  - h5py

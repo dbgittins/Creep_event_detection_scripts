@@ -6,3 +6,9 @@ __pycache__/*
 *.log
 *.idx
 *.csv
+era5_csv
+era5_data*
+Triggering
+waveforms
+logs
+test_kmeans.py
